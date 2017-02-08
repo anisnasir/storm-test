@@ -23,7 +23,6 @@ import java.util.Map;
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
-import org.apache.storm.starter.spout.RandomSentenceSpout;
 import org.apache.storm.starter.spout.ZipfGeneratorSpout;
 import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.OutputFieldsDeclarer;
@@ -88,10 +87,10 @@ public class WordCountTopology {
 
     TopologyBuilder builder = new TopologyBuilder();
 
-    builder.setSpout("spout", new ZipfGeneratorSpout(), 5);
+    builder.setSpout("spout", new ZipfGeneratorSpout(), 1);
 
-    builder.setBolt("split", new SplitSentence(), 8).fieldsGrouping("spout", new Fields("word"));
-    builder.setBolt("count", new WordCount(), 12).fieldsGrouping("split", new Fields("word"));
+    //builder.setBolt("split", new SplitSentence(), 8).fieldsGrouping("spout", new Fields("word"));
+    builder.setBolt("count", new WordCount(), 12).fieldsGrouping("spout", new Fields("word"));
 
     Config conf = new Config();
     conf.setDebug(true);
