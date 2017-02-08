@@ -1,0 +1,8 @@
+/home/yakumo/storm-starter/test/jvm/org/apache/storm/starter/tools/NthLastModifiedTimeTrackerTest.java
+/home/yakumo/storm-starter/test/jvm/org/apache/storm/starter/tools/SlotBasedCounterTest.java
+/home/yakumo/storm-starter/test/jvm/org/apache/storm/starter/bolt/IntermediateRankingsBoltTest.java
+/home/yakumo/storm-starter/test/jvm/org/apache/storm/starter/tools/SlidingWindowCounterTest.java
+/home/yakumo/storm-starter/test/jvm/org/apache/storm/starter/tools/RankingsTest.java
+/home/yakumo/storm-starter/test/jvm/org/apache/storm/starter/bolt/TotalRankingsBoltTest.java
+/home/yakumo/storm-starter/test/jvm/org/apache/storm/starter/bolt/RollingCountBoltTest.java
+/home/yakumo/storm-starter/test/jvm/org/apache/storm/starter/tools/RankableObjectWithFieldsTest.java
