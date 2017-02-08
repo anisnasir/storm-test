@@ -30,6 +30,7 @@ import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 import org.apache.storm.starter.spout.RandomSentenceSpout;
+import org.apache.storm.starter.spout.ZipfGeneratorSpout;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -89,7 +90,7 @@ public class WordCountTopology {
 
     TopologyBuilder builder = new TopologyBuilder();
 
-    builder.setSpout("spout", new RandomSentenceSpout(), 5);
+    builder.setSpout("spout", new ZipfGeneratorSpout(), 5);
 
     builder.setBolt("split", new SplitSentence(), 8).fieldsGrouping("spout", new Fields("word"));
     builder.setBolt("count", new WordCount(), 12).fieldsGrouping("split", new Fields("word"));
