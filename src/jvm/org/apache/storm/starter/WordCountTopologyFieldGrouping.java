@@ -35,7 +35,7 @@ import org.apache.storm.tuple.Values;
 /**
  * This topology demonstrates Storm's stream groupings and multilang capabilities.
  */
-public class WordCountTopology {
+public class WordCountTopologyFieldGrouping {
   public static class SplitSentence extends BaseBasicBolt {
     public SplitSentence() {
       //super("python", "splitsentence.py");
@@ -90,8 +90,8 @@ public class WordCountTopology {
     builder.setSpout("spout", new ZipfGeneratorSpout(), 1);
 
     //builder.setBolt("split", new SplitSentence(), 8).fieldsGrouping("spout", new Fields("word"));
-    //builder.setBolt("count", new WordCount(), 12).fieldsGrouping("spout", new Fields("word"));
-    builder.setBolt("count", new WordCount(), 12).shuffleGrouping("spout");
+    builder.setBolt("count", new WordCount(), 12).fieldsGrouping("spout", new Fields("word"));
+    //builder.setBolt("count", new WordCount(), 12).shuffleGrouping("spout");
 
     
     Config conf = new Config();
