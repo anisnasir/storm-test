@@ -40,12 +40,12 @@ public class WordCountTopologyShuffleGrouping {
 
     
     Config conf = new Config();
-    conf.setDebug(true);
-    conf.setMaxSpoutPending(5000);
-    conf.put(Config.TOPOLOGY_DEBUG, true);
-    conf.put(Config.TOPOLOGY_TRANSFER_BUFFER_SIZE,            32);
-    conf.put(Config.TOPOLOGY_EXECUTOR_RECEIVE_BUFFER_SIZE, 16384);
-    conf.put(Config.TOPOLOGY_EXECUTOR_SEND_BUFFER_SIZE,    16384);
+    //conf.setDebug(true);
+    //conf.setMaxSpoutPending(5000);
+    //conf.put(Config.TOPOLOGY_DEBUG, true);
+    //conf.put(Config.TOPOLOGY_TRANSFER_BUFFER_SIZE,            32);
+    //conf.put(Config.TOPOLOGY_EXECUTOR_RECEIVE_BUFFER_SIZE, 16384);
+    //conf.put(Config.TOPOLOGY_EXECUTOR_SEND_BUFFER_SIZE,    16384);
 
     if (args != null && args.length > 0) {
     	conf.setNumWorkers(12); // use two worker processes
