@@ -70,7 +70,7 @@ public class WordCountTopologyShuffleGrouping {
     conf.setDebug(true);
 
     if (args != null && args.length > 0) {
-      conf.setNumWorkers(6);
+      conf.setNumWorkers(12);
 
       StormSubmitter.submitTopologyWithProgressBar(args[0], conf, builder.createTopology());
     }
