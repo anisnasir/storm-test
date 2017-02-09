@@ -43,15 +43,20 @@ public class WordCountTopologyFieldGrouping {
     builder.setSpout("spout", new ZipfGeneratorSpout(), 1);
 
     //builder.setBolt("split", new SplitSentence(), 8).fieldsGrouping("spout", new Fields("word"));
-    builder.setBolt("count", new WordCount(), 12).fieldsGrouping("spout", new Fields("word"));
+    builder.setBolt("count", new WordCount(), 31).fieldsGrouping("spout", new Fields("word"));
     //builder.setBolt("count", new WordCount(), 12).shuffleGrouping("spout");
 
     
     Config conf = new Config();
     conf.setDebug(true);
+    conf.put(Config.TOPOLOGY_DEBUG, true);
+    conf.put(Config.TOPOLOGY_TRANSFER_BUFFER_SIZE,            32);
+    conf.put(Config.TOPOLOGY_EXECUTOR_RECEIVE_BUFFER_SIZE, 16384);
+    conf.put(Config.TOPOLOGY_EXECUTOR_SEND_BUFFER_SIZE,    16384);
 
     if (args != null && args.length > 0) {
-      conf.setNumWorkers(3);
+    	conf.setNumWorkers(12); // use two worker processes
+    
 
       StormSubmitter.submitTopologyWithProgressBar(args[0], conf, builder.createTopology());
     }
