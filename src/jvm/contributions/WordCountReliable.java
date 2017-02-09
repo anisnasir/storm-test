@@ -12,7 +12,7 @@ import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 
 
-public class WordCountAck extends BaseRichBolt {
+public class WordCountReliable extends BaseRichBolt {
 	OutputCollector _collector;
 	Map<String, Integer> counts = new HashMap<String, Integer>();
 

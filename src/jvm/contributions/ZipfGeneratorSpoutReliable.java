@@ -28,7 +28,7 @@ import org.apache.storm.topology.base.BaseRichSpout;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Values;
 
-public class ZipfGeneratorSpout extends BaseRichSpout {
+public class ZipfGeneratorSpoutReliable extends BaseRichSpout {
 	/**
 	 * 
 	 */
@@ -67,7 +67,7 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 		if(messageCount < numMessages ) {
 			long num = zipf.sample();
 			String sentence = String.valueOf(num);
-			_collector.emit(new Values(sentence));
+			_collector.emit(new Values(sentence), num);
 			messageCount++;	
 		}
 		return;

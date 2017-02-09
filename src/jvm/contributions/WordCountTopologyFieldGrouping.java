@@ -43,7 +43,7 @@ public class WordCountTopologyFieldGrouping {
     builder.setSpout("spout", new ZipfGeneratorSpout(), 1);
 
     //builder.setBolt("split", new SplitSentence(), 8).fieldsGrouping("spout", new Fields("word"));
-    builder.setBolt("count", new WordCountAck(), 31).fieldsGrouping("spout", new Fields("word"));
+    builder.setBolt("count", new WordCount(), 31).fieldsGrouping("spout", new Fields("word"));
     //builder.setBolt("count", new WordCount(), 12).shuffleGrouping("spout");
 
     
