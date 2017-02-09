@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.storm.starter;
+package contributions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +23,6 @@ import java.util.Map;
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
-import org.apache.storm.starter.spout.ZipfGeneratorSpout;
 import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.TopologyBuilder;
@@ -35,34 +34,7 @@ import org.apache.storm.tuple.Values;
 /**
  * This topology demonstrates Storm's stream groupings and multilang capabilities.
  */
-public class WordCountTopologyFieldGrouping {
-  public static class SplitSentence extends BaseBasicBolt {
-    public SplitSentence() {
-      //super("python", "splitsentence.py");
-    }
-
-    @Override
-    public void declareOutputFields(OutputFieldsDeclarer declarer) {
-      declarer.declare(new Fields("word"));
-    }
-
-    @Override
-    public Map<String, Object> getComponentConfiguration() {
-      return null;
-    }
-
-    @Override
-    public void execute(Tuple tuple, BasicOutputCollector collector) {
-      String sentence = tuple.getString(0);
-      String delims = "[ .,?!]+";
-    	
-      String words[] = sentence.split(delims);
-      for(String word: words) {
-        collector.emit(new Values(word));
-      }
-    }
-  }
-
+public class WordCountTopologyShuffleGrouping {
   public static class WordCount extends BaseBasicBolt {
     Map<String, Integer> counts = new HashMap<String, Integer>();
 
@@ -90,8 +62,8 @@ public class WordCountTopologyFieldGrouping {
     builder.setSpout("spout", new ZipfGeneratorSpout(), 1);
 
     //builder.setBolt("split", new SplitSentence(), 8).fieldsGrouping("spout", new Fields("word"));
-    builder.setBolt("count", new WordCount(), 12).fieldsGrouping("spout", new Fields("word"));
-    //builder.setBolt("count", new WordCount(), 12).shuffleGrouping("spout");
+    //builder.setBolt("count", new WordCount(), 12).fieldsGrouping("spout", new Fields("word"));
+    builder.setBolt("count", new WordCount(), 12).shuffleGrouping("spout");
 
     
     Config conf = new Config();

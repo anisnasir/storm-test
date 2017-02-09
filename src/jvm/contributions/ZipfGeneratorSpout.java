@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.storm.starter.spout;
+package contributions;
 
 import java.util.Map;
 import java.util.Random;

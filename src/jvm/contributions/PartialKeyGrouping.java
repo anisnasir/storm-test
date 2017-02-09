@@ -1,4 +1,4 @@
-package org.apache.storm.starter;
+package contributions;
 
 import java.io.Serializable;
 import java.util.ArrayList;
