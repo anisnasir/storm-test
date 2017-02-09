@@ -74,9 +74,8 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 	public void nextTuple() {
 		if(messageCount < numMessages ) {
 			long num = zipf.sample();
-			long timeStamp = System.currentTimeMillis();
 			String sentence = String.valueOf(num);
-			_collector.emit(new Values(sentence,timeStamp),num);
+			_collector.emit(new Values(sentence));
 			messageCount++;	
 		}
 		return;
