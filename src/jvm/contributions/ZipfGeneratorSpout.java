@@ -91,7 +91,7 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 
 	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		declarer.declare(new Fields("word","count"));
+		declarer.declare(new Fields("word"));
 	}
 
 }
