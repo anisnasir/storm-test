@@ -36,7 +36,7 @@ public class WordCountTopologyShuffleGrouping {
 
     //builder.setBolt("split", new SplitSentence(), 8).fieldsGrouping("spout", new Fields("word"));
     //builder.setBolt("count", new WordCount(), 12).fieldsGrouping("spout", new Fields("word"));
-    builder.setBolt("count", new WordCount(), 31).shuffleGrouping("spout");
+    builder.setBolt("count", new WordCountAck(), 31).shuffleGrouping("spout");
 
     
     Config conf = new Config();
