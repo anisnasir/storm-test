@@ -29,9 +29,6 @@ import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Values;
 
 public class ZipfGeneratorSpout extends BaseRichSpout {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	SpoutOutputCollector _collector;
 	Random _rand;
@@ -41,15 +38,6 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 	ZipfDistribution zipf;
 	String randomStr;
 	int messageCount;
-
-	public String fillString(int count,char c) {
-	    StringBuilder sb = new StringBuilder( count );
-	    for( int i=0; i<count; i++ ) {
-	        sb.append( c ); 
-	    }
-	    return sb.toString();
-	}
-
 
 	@Override
 	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
@@ -72,15 +60,7 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 		}
 		return;
 	}
-
-	@Override
-	public void ack(Object id) {
-	}
-
-	@Override
-	public void fail(Object id) {
-	}
-
+	
 	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 		declarer.declare(new Fields("word"));
