@@ -67,10 +67,11 @@ public class WordCountTopologyShuffleGrouping {
 
     
     Config conf = new Config();
-    conf.setDebug(true);
+    conf.setDebug(false);
 
     if (args != null && args.length > 0) {
-      conf.setNumWorkers(12);
+    	conf.setNumWorkers(12); // use two worker processes
+    	
 
       StormSubmitter.submitTopologyWithProgressBar(args[0], conf, builder.createTopology());
     }
