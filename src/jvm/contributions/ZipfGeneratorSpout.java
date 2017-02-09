@@ -50,13 +50,6 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 	    return sb.toString();
 	}
 
-	private static String createDataSize(int msgSize) {
-		StringBuilder sb = new StringBuilder(msgSize);
-		for (int i=0; i<msgSize; i++) {
-			sb.append('a');
-		}
-		return sb.toString();
-	}
 
 	@Override
 	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
@@ -66,7 +59,6 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 		k = 10000;
 		skew = 1.0;
 		zipf = new ZipfDistribution(k,skew);
-		randomStr = createDataSize(500);
 		messageCount = 0;
 
 	}
@@ -75,7 +67,7 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 		if(messageCount < numMessages ) {
 			long num = zipf.sample();
 			String sentence = String.valueOf(num);
-			_collector.emit(new Values(sentence));
+			_collector.emit(new Values(sentence), num);
 			messageCount++;	
 		}
 		return;
