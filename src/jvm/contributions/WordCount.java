@@ -22,7 +22,8 @@ public class WordCount extends BaseBasicBolt {
       count++;
       counts.put(word, count);
       try {
-		Thread.sleep(count/1000);
+    	  if(count >1000)
+    		  Thread.sleep(1);
 	} catch (InterruptedException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
