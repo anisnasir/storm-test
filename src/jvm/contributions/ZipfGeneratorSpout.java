@@ -20,7 +20,7 @@ package contributions;
 import java.util.Map;
 import java.util.Random;
 
-//import org.apache.commons.math3.distribution.ZipfDistribution;
+import org.apache.commons.math3.distribution.ZipfDistribution;
 import org.apache.storm.spout.SpoutOutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
@@ -33,9 +33,9 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 	SpoutOutputCollector _collector;
 	Random _rand;
 	int numMessages;
-	//int k; //unique Elements
+	int k; //unique Elements
 	double skew;
-	//ZipfDistribution zipf;
+	ZipfDistribution zipf;
 	String randomStr;
 	int messageCount;
 
@@ -43,17 +43,16 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
 		_collector = collector;
 		_rand = new Random();
-		numMessages = 10000000;
-		//k = 10000;
+		k = 1000;
 		skew = 1.0;
-		//zipf = new ZipfDistribution(k,skew);
+		zipf = new ZipfDistribution(k,skew);
 		messageCount = 0;
 
 	}
 	@Override
 	public void nextTuple() {
 		//if(messageCount < numMessages ) {
-			long num = Math.abs(_rand.nextLong())%10000;
+			long num = zipf.sample();
 			String sentence = String.valueOf(num);
 			_collector.emit(new Values(sentence), num);
 			messageCount++;	
