@@ -55,7 +55,7 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 		//if(messageCount < numMessages ) {
 			long num = Math.abs(_rand.nextLong())%10000;
 			String sentence = String.valueOf(num);
-			_collector.emit(new Values(sentence));
+			_collector.emit(new Values(sentence), num);
 			messageCount++;	
 		//}
 		//return;

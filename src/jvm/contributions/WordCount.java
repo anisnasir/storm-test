@@ -15,6 +15,7 @@ import org.apache.storm.tuple.Values;
 
 public class WordCount implements IRichBolt {
     Map<String, Long> counts = new HashMap<String, Long>();
+    OutputCollector _collector;
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
@@ -35,11 +36,14 @@ public class WordCount implements IRichBolt {
 	        count = (long) 0;
 	      count++;
 	      counts.put(word, count);
+	      _collector.emit(new Values(word, count));
+	      _collector.ack(tuple);
 	}
 
 	@Override
 	public void prepare(Map arg0, TopologyContext arg1, OutputCollector arg2) {
 		// TODO Auto-generated method stub
+		this._collector = arg2;
 		
 	}
 
