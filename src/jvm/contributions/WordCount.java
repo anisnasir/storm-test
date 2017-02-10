@@ -44,7 +44,7 @@ public class WordCount implements IRichBolt {
 	        count = (long) 0;
 	      count++;
 	      counts.put(word, count);
-	      testWait(count*1000);
+	      testWait(count*10000);
 		
 	      _collector.emit(new Values(word, count));
 	      _collector.ack(tuple);
