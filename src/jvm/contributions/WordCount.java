@@ -28,6 +28,14 @@ public class WordCount implements IRichBolt {
 		
 	}
 
+	public void testWait(long INTERVAL){
+	    long start = System.nanoTime();
+	    long end=0;
+	    do{
+	        end = System.nanoTime();
+	    }while(start + INTERVAL >= end);
+	}
+
 	@Override
 	public void execute(Tuple tuple) {
 		String word = tuple.getString(0);
@@ -36,12 +44,8 @@ public class WordCount implements IRichBolt {
 	        count = (long) 0;
 	      count++;
 	      counts.put(word, count);
-	      try {
-			Thread.sleep(count);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	      testWait(count*1000);
+		
 	      _collector.emit(new Values(word, count));
 	      _collector.ack(tuple);
 	}
