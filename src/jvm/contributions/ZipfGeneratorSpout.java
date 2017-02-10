@@ -17,6 +17,7 @@
  */
 package contributions;
 
+import java.security.SecureRandom;
 import java.util.Map;
 import java.util.Random;
 
@@ -49,20 +50,30 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 		messageCount = 0;
 
 	}
+	static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	static SecureRandom rnd = new SecureRandom();
+
+	String randomString( int len ){
+	   StringBuilder sb = new StringBuilder( len );
+	   for( int i = 0; i < len; i++ ) 
+	      sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
+	   return sb.toString();
+	}
+	
 	@Override
 	public void nextTuple() {
 		//if(messageCount < numMessages ) {
-			long num = zipf.sample();
-			String sentence = String.valueOf(num);
-			_collector.emit(new Values(sentence), num);
-			messageCount++;	
+		String word = randomString(10);
+		long num = zipf.sample();
+		_collector.emit(new Values(word,num), word);
+		messageCount++;	
 		//}
 		//return;
 	}
 	
 	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		declarer.declare(new Fields("word"));
+		declarer.declare(new Fields("word", "procTime"));
 	}
 
 }
