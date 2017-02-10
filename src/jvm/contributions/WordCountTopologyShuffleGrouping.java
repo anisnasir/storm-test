@@ -40,8 +40,8 @@ public class WordCountTopologyShuffleGrouping {
 
     
     Config conf = new Config();
-    conf.setMaxSpoutPending(5000);
     //conf.setDebug(true);
+    //conf.setMaxSpoutPending(5000);
     //conf.put(Config.TOPOLOGY_DEBUG, true);
     //conf.put(Config.TOPOLOGY_TRANSFER_BUFFER_SIZE,            32);
     //conf.put(Config.TOPOLOGY_EXECUTOR_RECEIVE_BUFFER_SIZE, 16384);
