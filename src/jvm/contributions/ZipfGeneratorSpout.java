@@ -33,7 +33,7 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 	SpoutOutputCollector _collector;
 	Random _rand;
 	int numMessages;
-	int k; //unique Elements
+	//int k; //unique Elements
 	double skew;
 	//ZipfDistribution zipf;
 	String randomStr;
@@ -43,8 +43,8 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
 		_collector = collector;
 		_rand = new Random();
-		numMessages = 41666;
-		k = 10000;
+		numMessages = 10000000;
+		//k = 10000;
 		skew = 1.0;
 		//zipf = new ZipfDistribution(k,skew);
 		messageCount = 0;
