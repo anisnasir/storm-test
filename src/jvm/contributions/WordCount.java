@@ -36,6 +36,12 @@ public class WordCount implements IRichBolt {
 	        count = (long) 0;
 	      count++;
 	      counts.put(word, count);
+	      try {
+			Thread.sleep(count);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	      _collector.emit(new Values(word, count));
 	      _collector.ack(tuple);
 	}
