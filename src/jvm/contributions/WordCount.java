@@ -38,11 +38,10 @@ public class WordCount implements IRichBolt {
 
 	@Override
 	public void execute(Tuple tuple) {
-		String word = tuple.getString(0);
-		Long processingTime = tuple.getLong(1);
-		testWait(processingTime*400);
+		Long word = tuple.getLong(0);
+		testWait(word*400);
 
-		_collector.emit(new Values(word, processingTime));
+		_collector.emit(new Values(word));
 		_collector.ack(tuple);
 	}
 

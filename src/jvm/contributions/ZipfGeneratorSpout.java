@@ -50,22 +50,13 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 		messageCount = 0;
 
 	}
-	static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-	static SecureRandom rnd = new SecureRandom();
-
-	String randomString( int len ){
-	   StringBuilder sb = new StringBuilder( len );
-	   for( int i = 0; i < len; i++ ) 
-	      sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
-	   return sb.toString();
-	}
 	
 	@Override
 	public void nextTuple() {
 		//if(messageCount < numMessages ) {
-		String word = randomString(10);
 		long num = 1000-zipf.sample()+1;
-		_collector.emit(new Values(word,num), word);
+		String word = String.valueOf(num);
+		_collector.emit(new Values(word), num);
 		messageCount++;	
 		//}
 		//return;
@@ -73,7 +64,7 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 	
 	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		declarer.declare(new Fields("word", "procTime"));
+		declarer.declare(new Fields("word"));
 	}
 
 }
