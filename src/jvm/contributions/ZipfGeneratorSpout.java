@@ -44,7 +44,7 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 		_collector = collector;
 		_rand = new Random();
 		k = 1000;
-		skew = 1.0;
+		skew = 2.0;
 		zipf = new ZipfDistribution(k,skew);
 		messageCount = 0;
 
