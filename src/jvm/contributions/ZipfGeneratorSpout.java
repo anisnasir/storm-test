@@ -52,13 +52,13 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 	}
 	@Override
 	public void nextTuple() {
-		if(messageCount < numMessages ) {
+		//if(messageCount < numMessages ) {
 			long num = Math.abs(_rand.nextLong())%10000;
 			String sentence = String.valueOf(num);
 			_collector.emit(new Values(sentence));
 			messageCount++;	
-		}
-		return;
+		//}
+		//return;
 	}
 	
 	@Override

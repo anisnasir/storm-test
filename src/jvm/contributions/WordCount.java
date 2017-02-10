@@ -14,7 +14,7 @@ import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 
 public class WordCount implements IRichBolt {
-    Map<String, Integer> counts = new HashMap<String, Integer>();
+    Map<String, Long> counts = new HashMap<String, Long>();
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
@@ -30,9 +30,9 @@ public class WordCount implements IRichBolt {
 	@Override
 	public void execute(Tuple tuple) {
 		String word = tuple.getString(0);
-	      Integer count = counts.get(word);
+	      Long count = counts.get(word);
 	      if (count == null)
-	        count = 0;
+	        count = (long) 0;
 	      count++;
 	      counts.put(word, count);
 	}
