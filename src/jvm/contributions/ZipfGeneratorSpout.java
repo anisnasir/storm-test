@@ -60,9 +60,9 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 		zipf = new ZipfDistribution(k,skew);
 		messageCount = 0;
 		list = new ArrayList<LocalObject>();
-		for(int i=1;i<=1000;i++) {
+		for(int i=0;i<1000;i++) {
 			String word = randomString(10);
-			double probability  = zipf.probability(i);
+			double probability  = zipf.probability(i+1);
 			long value  = (long)(k*probability);
 			list.add(new LocalObject(word,value));
 		}
