@@ -18,6 +18,8 @@
 package contributions;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -37,9 +39,18 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 	int k; //unique Elements
 	double skew;
 	ZipfDistribution zipf;
+	ArrayList<LocalObject> list;
 	String randomStr;
 	int messageCount;
 
+	private class LocalObject {
+		String word;
+		Long processingTime;
+		LocalObject(String word, long time) {
+			this.word = word;
+			processingTime = time;
+		}
+	}
 	@Override
 	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
 		_collector = collector;
@@ -48,15 +59,34 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 		skew = 2.0;
 		zipf = new ZipfDistribution(k,skew);
 		messageCount = 0;
+		list = new ArrayList<LocalObject>();
+		for(int i=1;i<=1000;i++) {
+			String word = randomString(10);
+			double probability  = zipf.probability(i);
+			long value  = (long)(k*probability);
+			list.add(new LocalObject(word,value));
+		}
 
 	}
+	static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	static SecureRandom rnd = new SecureRandom();
+
+	String randomString( int len ){
+	   StringBuilder sb = new StringBuilder( len );
+	   for( int i = 0; i < len; i++ ) 
+	      sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
+	   return sb.toString();
+	}
+	
 	
 	@Override
 	public void nextTuple() {
 		//if(messageCount < numMessages ) {
-		long num = 1000-zipf.sample()+1;
-		String word = String.valueOf(num);
-		_collector.emit(new Values(word), num);
+		LocalObject temp = list.get(messageCount);
+		messageCount++;
+		messageCount %= k;
+		
+		_collector.emit(new Values(temp.word, temp.processingTime), temp.word);
 		messageCount++;	
 		//}
 		//return;
@@ -64,7 +94,7 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 	
 	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		declarer.declare(new Fields("word"));
+		declarer.declare(new Fields("word", "procTime"));
 	}
 
 }
