@@ -42,6 +42,7 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 	ArrayList<LocalObject> list;
 	String randomStr;
 	int messageCount;
+	long msgId = 0;
 
 	private class LocalObject {
 		String word;
@@ -86,7 +87,7 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 		messageCount++;
 		messageCount %= k;
 		
-		_collector.emit(new Values(temp.word, temp.processingTime), temp.word);
+		_collector.emit(new Values(temp.word, temp.processingTime), msgId++);
 		//messageCount++;	
 		//}
 		//return;
