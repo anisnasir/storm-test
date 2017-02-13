@@ -64,7 +64,7 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 			String word = randomString(10);
 			double probability  = zipf.probability(i+1);
 			long value  = (long)(k*probability);
-			list.add(new LocalObject(word,value));
+			list.add(i, new LocalObject(word,value));
 		}
 
 	}
@@ -87,7 +87,7 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 		messageCount %= k;
 		
 		_collector.emit(new Values(temp.word, temp.processingTime), temp.word);
-		messageCount++;	
+		//messageCount++;	
 		//}
 		//return;
 	}
