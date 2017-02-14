@@ -19,6 +19,7 @@ package contributions;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -36,9 +37,11 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 	SpoutOutputCollector _collector;
 	Random _rand;
 	int numMessages;
-	int k; //unique Elements
-	double skew;
-	ZipfDistribution zipf;
+	int numItems; //unique Elements
+	double serviceTimeSkew;
+	double inputSkew;
+	ZipfDistribution serviceTimeZipf;
+	ZipfDistribution inputZipf;
 	ArrayList<LocalObject> list;
 	String randomStr;
 	int messageCount;
@@ -56,17 +59,23 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
 		_collector = collector;
 		_rand = new Random();
-		k = 1000;
-		skew = 3.0;
-		zipf = new ZipfDistribution(k,skew);
+		numItems = 1000;
+		serviceTimeSkew = 1.0;
+		inputSkew = 3.0;
+		serviceTimeZipf = new ZipfDistribution(numItems,serviceTimeSkew);
+		inputZipf = new ZipfDistribution(numItems,inputSkew);
 		messageCount = 0;
 		list = new ArrayList<LocalObject>();
 		for(int i=0;i<1000;i++) {
 			String word = randomString(10);
-			double probability  = zipf.probability(i+1);
-			long value  = (long)(k*probability);
-			list.add(i, new LocalObject(word,value));
+			double probability  = serviceTimeZipf.probability(i+1);
+			long value  = (long)(numItems*probability);
+			double inputProbability = inputZipf.probability(i+1);
+			long inputValue = (long)(numItems*inputProbability);
+			for(int j=0;j<inputValue;j++ )
+				list.add(i, new LocalObject(word,value));
 		}
+		Collections.shuffle(list);
 
 	}
 	static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -85,7 +94,7 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 		//if(messageCount < numMessages ) {
 		LocalObject temp = list.get(messageCount);
 		messageCount++;
-		messageCount %= k;
+		messageCount %= list.size();
 		
 		_collector.emit(new Values(temp.word, temp.processingTime), msgId++);
 		//messageCount++;	
