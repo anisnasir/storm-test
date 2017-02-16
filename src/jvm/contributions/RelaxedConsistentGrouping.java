@@ -49,7 +49,7 @@ public class RelaxedConsistentGrouping implements LoadAwareCustomStreamGrouping,
     @Override
     public void prepare(WorkerTopologyContext context, GlobalStreamId stream, List<Integer> targetTasks) {
         this.targetTasks = targetTasks;
-        hash = new RelaxedConsistentHashing(targetTasks.size(), 100);
+        hash = new RelaxedConsistentHashing(targetTasks.size(), 1000);
         if (this.fields != null) {
             this.outFields = context.getComponentOutputFields(stream);
         }
