@@ -17,26 +17,35 @@
  */
 package contributions;
 
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
+import org.apache.storm.topology.BasicOutputCollector;
+import org.apache.storm.topology.BoltDeclarer;
+import org.apache.storm.topology.OutputFieldsDeclarer;
+import org.apache.storm.topology.SpoutDeclarer;
 import org.apache.storm.topology.TopologyBuilder;
+import org.apache.storm.topology.base.BaseBasicBolt;
+import org.apache.storm.tuple.Fields;
+import org.apache.storm.tuple.Tuple;
+import org.apache.storm.tuple.Values;
 
 /**
  * This topology demonstrates Storm's stream groupings and multilang capabilities.
  */
-public class WordCountTopologyLoadAwareShuffleGrouping {
+public class WordCountTopologyConsistentGrouping {
 
   public static void main(String[] args) throws Exception {
 
     TopologyBuilder builder = new TopologyBuilder();
-
-    builder.setSpout("spout", new ZipfGeneratorSpout(), 1);
-
+    
+    SpoutDeclarer spout = builder.setSpout("spout", new ZipfGeneratorSpout(), 1);
     //builder.setBolt("split", new SplitSentence(), 8).fieldsGrouping("spout", new Fields("word"));
-    //builder.setBolt("count", new WordCount(), 12).fieldsGrouping("spout", new Fields("word"));
-    builder.setBolt("count", new WordCount(), 47).customGrouping("spout", new LoadAwareShuffleGrouping());
+    BoltDeclarer bolt = builder.setBolt("count", new WordCount(), 47).customGrouping("spout", new RelaxedConsistentGrouping());
+    //builder.setBolt("count", new WordCount(), 12).shuffleGrouping("spout");
 
     
     Config conf = new Config();
@@ -49,7 +58,7 @@ public class WordCountTopologyLoadAwareShuffleGrouping {
 
     if (args != null && args.length > 0) {
     	conf.setNumWorkers(16); // use two worker processes
-    	
+    
 
       StormSubmitter.submitTopologyWithProgressBar(args[0], conf, builder.createTopology());
     }
