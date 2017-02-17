@@ -21,7 +21,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.apache.storm.tuple.Values;
@@ -35,7 +37,13 @@ public class RelaxedConsistentGroupingTest {
     public void testChooseTasks() {
     	RelaxedConsistentGrouping grouping = new RelaxedConsistentGrouping();
     	LoadMapping loadMapping = new LoadMapping();
-    	grouping.prepare(null, null, Lists.newArrayList(0, 1, 2, 3, 4, 5));
+    	List<Integer> targetTasks = Lists.newArrayList(0, 1, 2, 3, 4, 5,6,7,8,9);
+    	Map<Integer, Double> local = new HashMap<Integer,Double>();
+    	for(int i = 0; i< 10;i++) {
+    		local.put(i, 0.5);
+    	}
+    	loadMapping.setLocal(local);
+    	grouping.prepare(null, null, targetTasks);
         Values message1 = new Values("key1");
         List<Integer> choice1 = grouping.chooseTasks(0, message1, loadMapping);
         assertThat(choice1.size(), is(1));

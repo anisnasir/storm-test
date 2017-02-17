@@ -99,6 +99,7 @@ public class RelaxedConsistentGrouping implements LoadAwareCustomStreamGrouping,
             	//add increase load and decrease load logic
             	for (int i = 0; i < targetTasks.size(); i++) {
                     double val = load.get(targetTasks.get(i));
+                    
                     if(val >0.8) {
                     	hash.reduceLoad(i);	
                     }else if(val < 0.5) {
@@ -110,7 +111,7 @@ public class RelaxedConsistentGrouping implements LoadAwareCustomStreamGrouping,
             }
             
             int selected = hash.getServer(raw);
-            boltIds.add(targetTasks.get(selected));
+            boltIds.add(targetTasks.get(0));
         }
         return boltIds;
     }
