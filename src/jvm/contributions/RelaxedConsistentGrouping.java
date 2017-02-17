@@ -116,13 +116,7 @@ public class RelaxedConsistentGrouping implements LoadAwareCustomStreamGrouping,
                 lastUpdate = System.currentTimeMillis();
             }
             */
-            int firstChoice = (int) (FastMath.abs(h1.hashBytes(raw).asLong()) % this.targetTasks.size());
-			int secondChoice = (int) (FastMath.abs(h2.hashBytes(raw).asLong()) % this.targetTasks.size());
-			
-			double firstLoad = load.get(targetTasks.get(firstChoice));
-			double secondLoad = load.get(targetTasks.get(secondChoice));
-			
-			int selected = firstLoad>secondLoad?secondChoice:firstChoice;
+			int selected = 0;
 			boltIds.add(targetTasks.get(selected));
         }
         return boltIds;
