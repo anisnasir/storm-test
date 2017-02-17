@@ -41,8 +41,6 @@ public class RelaxedConsistentGrouping implements LoadAwareCustomStreamGrouping,
     private Fields outFields = null;
     private long lastUpdate = 0;
     RelaxedConsistentHashing hash;
-    private HashFunction h1 = Hashing.murmur3_128(13);
-	private HashFunction h2 = Hashing.murmur3_128(17);
 	int selected = 0 ;
   
     public RelaxedConsistentGrouping() {
@@ -102,7 +100,7 @@ public class RelaxedConsistentGrouping implements LoadAwareCustomStreamGrouping,
                 raw = values.get(0).toString().getBytes(); // assume key is the first field
             }
             
-           /* if ((lastUpdate + 60000) < System.currentTimeMillis()) {
+            if ((lastUpdate + 10000) < System.currentTimeMillis()) {
             	//add increase load and decrease load logic
             	for (int i = 0; i < targetTasks.size(); i++) {
                     double val = load.get(targetTasks.get(i));
@@ -116,9 +114,8 @@ public class RelaxedConsistentGrouping implements LoadAwareCustomStreamGrouping,
             	}
                 lastUpdate = System.currentTimeMillis();
             }
-            */
-			selected++;
-			selected %=targetTasks.size();
+            
+			int selected = hash.getServer(raw);
 			boltIds.add(targetTasks.get(selected));
         }
         return boltIds;
