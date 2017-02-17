@@ -23,11 +23,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.math3.util.FastMath;
 import org.apache.storm.generated.GlobalStreamId;
 import org.apache.storm.grouping.LoadAwareCustomStreamGrouping;
 import org.apache.storm.grouping.LoadMapping;
 import org.apache.storm.task.WorkerTopologyContext;
 import org.apache.storm.tuple.Fields;
+
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
 
 
 public class RelaxedConsistentGrouping implements LoadAwareCustomStreamGrouping, Serializable {
@@ -37,6 +41,8 @@ public class RelaxedConsistentGrouping implements LoadAwareCustomStreamGrouping,
     private Fields outFields = null;
     private long lastUpdate = 0;
     RelaxedConsistentHashing hash;
+    private HashFunction h1 = Hashing.murmur3_128(13);
+	private HashFunction h2 = Hashing.murmur3_128(17);
   
     public RelaxedConsistentGrouping() {
     	//Empty
@@ -95,7 +101,7 @@ public class RelaxedConsistentGrouping implements LoadAwareCustomStreamGrouping,
                 raw = values.get(0).toString().getBytes(); // assume key is the first field
             }
             
-            if ((lastUpdate + 60000) < System.currentTimeMillis()) {
+           /* if ((lastUpdate + 60000) < System.currentTimeMillis()) {
             	//add increase load and decrease load logic
             	for (int i = 0; i < targetTasks.size(); i++) {
                     double val = load.get(targetTasks.get(i));
@@ -109,9 +115,15 @@ public class RelaxedConsistentGrouping implements LoadAwareCustomStreamGrouping,
             	}
                 lastUpdate = System.currentTimeMillis();
             }
-            
-            int selected = hash.getServer(raw);
-            boltIds.add(targetTasks.get(0));
+            */
+            int firstChoice = (int) (FastMath.abs(h1.hashBytes(raw).asLong()) % this.targetTasks.size());
+			int secondChoice = (int) (FastMath.abs(h2.hashBytes(raw).asLong()) % this.targetTasks.size());
+			
+			double firstLoad = load.get(targetTasks.get(firstChoice));
+			double secondLoad = load.get(targetTasks.get(secondChoice));
+			
+			int selected = firstLoad>secondLoad?secondChoice:firstChoice;
+			boltIds.add(targetTasks.get(selected));
         }
         return boltIds;
     }
