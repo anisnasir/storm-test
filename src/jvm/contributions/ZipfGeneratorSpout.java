@@ -60,8 +60,8 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 		_collector = collector;
 		_rand = new Random();
 		numItems = 1000;
-		serviceTimeSkew = 1.0;
-		inputSkew = 0.3;
+		serviceTimeSkew = 0.3;
+		inputSkew = 1.0;
 		serviceTimeZipf = new ZipfDistribution(numItems,serviceTimeSkew);
 		inputZipf = new ZipfDistribution(numItems,inputSkew);
 		messageCount = 0;
