@@ -100,7 +100,7 @@ public class RelaxedConsistentGrouping implements LoadAwareCustomStreamGrouping,
                 raw = values.get(0).toString().getBytes(); // assume key is the first field
             }
             
-            if ((lastUpdate + 30000) < System.currentTimeMillis()) {
+            if ((lastUpdate + 10000) < System.currentTimeMillis()) {
             	//add increase load and decrease load logic
             	for (int i = 0; i < targetTasks.size(); i++) {
                     double val = load.get(targetTasks.get(i));
