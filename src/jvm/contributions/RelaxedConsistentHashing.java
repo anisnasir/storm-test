@@ -77,8 +77,8 @@ public class RelaxedConsistentHashing{
 	}
 	
 	public void reduceLoad(int node) {
-		int replicaCount = numVirtualServers.get(node);		
-		if(replicaCount > 0) {
+		int replicaCount = numVirtualServers.get(node);	
+		if(replicaCount > 1) {
 			String str = node +":"+ (replicaCount-1);
 			int key = (int) (Math.abs(hashFunction.hashBytes(str.getBytes()).asLong()));
 			circle.remove(key);
