@@ -30,6 +30,7 @@ import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseRichSpout;
 import org.apache.storm.tuple.Fields;
+import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 
 public class ZipfGeneratorSpout extends BaseRichSpout {
@@ -60,7 +61,7 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 		_collector = collector;
 		_rand = new Random();
 		numItems = 1000;
-		serviceTimeSkew = 0.5;
+		serviceTimeSkew = 1.1;
 		inputSkew = 1.0;
 		serviceTimeZipf = new ZipfDistribution(numItems,serviceTimeSkew);
 		inputZipf = new ZipfDistribution(numItems,inputSkew);
@@ -105,6 +106,15 @@ public class ZipfGeneratorSpout extends BaseRichSpout {
 	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 		declarer.declare(new Fields("word", "procTime"));
+	}
+	
+	@Override
+	public void ack(Object id) {
+
+	}
+
+	@Override
+	public void fail(Object id) {
 	}
 
 }
