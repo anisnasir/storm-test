@@ -58,6 +58,7 @@ public class WordCountTopologyFieldGrouping {
     spoutConfig.bufferSizeBytes = 1024 * 1024 * 4;
     spoutConfig.fetchSizeBytes = 1024 * 1024 * 4;
     spoutConfig.startOffsetTime=0;
+    spoutConfig.outputStreamId="word";
     spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());
     
     
