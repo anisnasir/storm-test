@@ -51,10 +51,10 @@ public class WordCountTopologyFieldGrouping {
 
     TopologyBuilder builder = new TopologyBuilder();
 
-    String zkConnString="9.116.35.208:2181";
+    String zkConnString="9.116.35.208:9092";
     String topicName= "test";
     BrokerHosts hosts = new ZkHosts(zkConnString);
-    SpoutConfig spoutConfig = new SpoutConfig(hosts, topicName, "", UUID.randomUUID().toString());
+    SpoutConfig spoutConfig = new SpoutConfig(hosts, topicName, "/" + topicName, UUID.randomUUID().toString());
     spoutConfig.startOffsetTime = kafka.api.OffsetRequest.EarliestTime();
     spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme() {
     	@Override
