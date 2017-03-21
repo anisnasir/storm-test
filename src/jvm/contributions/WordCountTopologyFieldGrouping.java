@@ -68,8 +68,8 @@ public class WordCountTopologyFieldGrouping {
     builder.setSpout("spout",kafkaSpout, 1);
 
     //builder.setBolt("split", new SplitSentence(), 8).fieldsGrouping("spout", new Fields("word"));
-    builder.setBolt("count", new WordCount(), 47).fieldsGrouping("spout", new Fields("word"));
-    //builder.setBolt("count", new WordCount(), 12).shuffleGrouping("spout");
+    //builder.setBolt("count", new WordCount(), 47).fieldsGrouping("spout", new Fields("word"));
+    builder.setBolt("count", new WordCount(), 12).shuffleGrouping("spout");
 
     
     Config conf = new Config();
