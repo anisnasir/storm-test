@@ -17,29 +17,15 @@
  */
 package contributions;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
-
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
-import org.apache.storm.kafka.Broker;
 import org.apache.storm.kafka.BrokerHosts;
 import org.apache.storm.kafka.KafkaSpout;
 import org.apache.storm.kafka.SpoutConfig;
-import org.apache.storm.kafka.StaticHosts;
-import org.apache.storm.kafka.StringScheme;
 import org.apache.storm.kafka.ZkHosts;
-import org.apache.storm.kafka.trident.GlobalPartitionInformation;
-import org.apache.storm.spout.SchemeAsMultiScheme;
-import org.apache.storm.topology.BasicOutputCollector;
-import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.TopologyBuilder;
-import org.apache.storm.topology.base.BaseBasicBolt;
-import org.apache.storm.tuple.Fields;
-import org.apache.storm.tuple.Tuple;
-import org.apache.storm.tuple.Values;
 
 
 /**
