@@ -12,8 +12,11 @@ import org.apache.storm.topology.base.BaseBasicBolt;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class WordCount implements IRichBolt {
+	public static final Logger LOG = LoggerFactory.getLogger(WordCount.class);
 	Map<String, Long> counts = new HashMap<String, Long>();
 	OutputCollector _collector;
 
@@ -40,6 +43,7 @@ public class WordCount implements IRichBolt {
 	public void execute(Tuple tuple) {
 		String word = tuple.getString(0);
 		//long time = tuple.getLong(1);
+		LOG.info("tuple received " +tuple.toString());
 		//testWait(time*10000);
 		_collector.emit(new Values(word));
 		_collector.ack(tuple);
