@@ -55,8 +55,6 @@ public class WordCountTopologyFieldGrouping {
     String topicName= "test";
     BrokerHosts hosts = new ZkHosts(zkConnString);
     SpoutConfig spoutConfig = new SpoutConfig(hosts, topicName, "/" + topicName, UUID.randomUUID().toString());
-    spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());
-    spoutConfig.startOffsetTime= kafka.api.OffsetRequest.EarliestTime();
     KafkaSpout kafkaSpout = new KafkaSpout(spoutConfig);
     
     
