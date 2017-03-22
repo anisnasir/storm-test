@@ -23,9 +23,7 @@ import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
 import org.apache.storm.kafka.BrokerHosts;
 import org.apache.storm.kafka.KafkaSpout;
-import org.apache.storm.kafka.KeyValueSchemeAsMultiScheme;
 import org.apache.storm.kafka.SpoutConfig;
-import org.apache.storm.kafka.StringKeyValueScheme;
 import org.apache.storm.kafka.StringScheme;
 import org.apache.storm.kafka.ZkHosts;
 import org.apache.storm.spout.SchemeAsMultiScheme;
@@ -38,13 +36,14 @@ import org.apache.storm.topology.TopologyBuilder;
 public class WordCountTopologyFieldGrouping {
 
   public static void main(String[] args) throws Exception {
+
     TopologyBuilder builder = new TopologyBuilder();
 
     String zkConnString="9.116.35.208:2181";
     String topicName= "test";
     BrokerHosts hosts = new ZkHosts(zkConnString);
     SpoutConfig spoutConfig = new SpoutConfig(hosts, topicName, "/" + topicName, UUID.randomUUID().toString());
-    spoutConfig.scheme = new KeyValueSchemeAsMultiScheme(new StringKeyValueScheme());
+    spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());
     KafkaSpout kafkaSpout = new KafkaSpout(spoutConfig);
     
     
