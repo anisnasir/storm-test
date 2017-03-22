@@ -12,7 +12,8 @@ public class WikiScheme implements Scheme {
 	private static final long serialVersionUID = 1L;
 	@Override
 	public List<Object> deserialize(ByteBuffer bytes) {
-		return new Values(new String( bytes.array(), Charset.forName("UTF-8") ));
+		String str = new String( bytes.array(), Charset.forName("ASCII") );
+		return new Values(str);
 	}
 	@Override
 	public Fields getOutputFields() {
