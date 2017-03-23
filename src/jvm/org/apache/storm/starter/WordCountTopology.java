@@ -17,9 +17,6 @@
  */
 package org.apache.storm.starter;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
@@ -32,8 +29,6 @@ import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 
 import contributions.SplitSentence;
-import contributions.WordCount;
-import contributions.ZipfGeneratorSpout;
 
 /**
  * This topology demonstrates Storm's stream groupings and multilang capabilities.
