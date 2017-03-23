@@ -13,7 +13,10 @@ public class WikiScheme implements Scheme {
 	@Override
 	public List<Object> deserialize(ByteBuffer bytes) {
 		//long  key = bytes.getLong();
-		String value = toString(bytes);
+		String value = "";
+				
+		if(bytes.hasArray())
+			value = bytes.toString(); 
 		return new Values(value);
 	}
 	@Override
