@@ -16,7 +16,7 @@ public class WikiScheme implements Scheme {
 		String value = "";
 				
 		if(bytes.hasArray())
-			value = bytes.toString(); 
+			value = bytes.array().toString(); 
 		return new Values(value);
 	}
 	@Override
