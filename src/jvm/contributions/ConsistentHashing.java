@@ -11,7 +11,7 @@ import com.google.common.hash.Hashing;
 
 
 
-public class RelaxedConsistentHashing{
+public class ConsistentHashing{
 	private HashFunction hashFunction = Hashing.murmur3_128(13);
 	private final int numWorkers; 
 	private final int numReplicas;
@@ -20,7 +20,7 @@ public class RelaxedConsistentHashing{
 	private final HashMap<Integer, Integer> numVirtualServers = 
 			new HashMap<Integer, Integer>();
 
-	public RelaxedConsistentHashing(int numberOfWorkers, int numberOfReplicas) {
+	public ConsistentHashing(int numberOfWorkers, int numberOfReplicas) {
 		this.numWorkers = numberOfWorkers;
 		this.numReplicas = numberOfReplicas;
 

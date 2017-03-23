@@ -19,10 +19,16 @@ package contributions;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
+import org.apache.storm.kafka.BrokerHosts;
+import org.apache.storm.kafka.KafkaSpout;
+import org.apache.storm.kafka.KeyValueSchemeAsMultiScheme;
+import org.apache.storm.kafka.SpoutConfig;
+import org.apache.storm.kafka.ZkHosts;
 import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.TopologyBuilder;
@@ -40,7 +46,15 @@ public class WordCountTopologyPartialKeyGrouping {
 
     TopologyBuilder builder = new TopologyBuilder();
 
-    builder.setSpout("spout", new ZipfGeneratorSpout(), 1);
+    String zkConnString="9.116.35.208:2181";
+    String topicName= "test";
+    BrokerHosts hosts = new ZkHosts(zkConnString);
+    SpoutConfig spoutConfig = new SpoutConfig(hosts, topicName, "/" + topicName, UUID.randomUUID().toString());
+    //spoutConfig.scheme = new SchemeAsMultiScheme(new WikiScheme());
+    spoutConfig.scheme = new KeyValueSchemeAsMultiScheme(new WikiScheme());
+    KafkaSpout kafkaSpout = new KafkaSpout(spoutConfig);
+
+    builder.setSpout("spout", kafkaSpout, 1);
 
     //builder.setBolt("split", new SplitSentence(), 8).fieldsGrouping("spout", new Fields("word"));
     builder.setBolt("count", new WordCount(), 47).partialKeyGrouping("spout", new Fields("word"));

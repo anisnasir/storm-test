@@ -34,27 +34,27 @@ import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
 
-public class RelaxedConsistentGrouping implements LoadAwareCustomStreamGrouping, Serializable {
+public class ConsistentGrouping implements LoadAwareCustomStreamGrouping, Serializable {
     private static final long serialVersionUID = -447379837314000353L;
     private List<Integer> targetTasks;
     private Fields fields = null;
     private Fields outFields = null;
     private long lastUpdate = 0;
-    RelaxedConsistentHashing hash;
+    ConsistentHashing hash;
 	int selected = 0 ;
   
-    public RelaxedConsistentGrouping() {
+    public ConsistentGrouping() {
     	//Empty
     }
 
-    public RelaxedConsistentGrouping(Fields fields) {
+    public ConsistentGrouping(Fields fields) {
         this.fields = fields;
     }
 
     @Override
     public void prepare(WorkerTopologyContext context, GlobalStreamId stream, List<Integer> targetTasks) {
         this.targetTasks = targetTasks;
-        hash = new RelaxedConsistentHashing(targetTasks.size(), 100);
+        hash = new ConsistentHashing(targetTasks.size(), 100);
         if (this.fields != null) {
             this.outFields = context.getComponentOutputFields(stream);
         }
