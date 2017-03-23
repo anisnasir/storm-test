@@ -12,11 +12,19 @@ public class WikiScheme implements Scheme {
 	private static final long serialVersionUID = 1L;
 	@Override
 	public List<Object> deserialize(ByteBuffer bytes) {
-		String str = new String( bytes.array(), Charset.forName("ASCII") );
-		return new Values(str);
+		long  key = bytes.getLong();
+		String value = toString(bytes);
+		return new Values(key, value);
 	}
 	@Override
 	public Fields getOutputFields() {
-		return new Fields("str");
+		return new Fields("timestamp", "word");
+	}
+	public static String toString(ByteBuffer bb) {
+	    final byte[] bytes = new byte[bb.remaining()];
+	 
+	    bb.duplicate().get(bytes);
+	 
+	    return new String(bytes);
 	}
 }
