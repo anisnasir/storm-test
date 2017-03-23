@@ -13,7 +13,7 @@ public class WikiScheme implements KeyValueScheme {
 	private static final long serialVersionUID = 1L;
 	@Override
 	public Fields getOutputFields() {
-		return new Fields("timestamp","word");
+		return new Fields("timestamp","word", "processingTime");
 	}
 	public static String toString(ByteBuffer bb) {
 	    final byte[] bytes = new byte[bb.remaining()];
@@ -26,7 +26,7 @@ public class WikiScheme implements KeyValueScheme {
 	public List<Object> deserializeKeyAndValue(ByteBuffer k, ByteBuffer v) {
 		String  key = toString(k);
 		String value = toString(v);
-		return new Values(key, value);
+		return new Values(key, value, 1);
 	}
 	@Override
 	public List<Object> deserialize(ByteBuffer ser) {
