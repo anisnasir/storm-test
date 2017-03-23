@@ -29,6 +29,7 @@ import org.apache.storm.kafka.SpoutConfig;
 import org.apache.storm.kafka.ZkHosts;
 import org.apache.storm.spout.SchemeAsMultiScheme;
 import org.apache.storm.topology.TopologyBuilder;
+import org.apache.storm.tuple.Fields;
 
 
 /**
@@ -49,22 +50,11 @@ public class WordCountTopologyFieldGrouping {
     KafkaSpout kafkaSpout = new KafkaSpout(spoutConfig);
     
     
-    //BrokerHosts hosts = new ZkHosts(zkConnString);
-    //SpoutConfig spoutConfig = new SpoutConfig(hosts, topicName, "/" + topicName, UUID.randomUUID().toString());
-    //spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme() {
-    //	@Override
-      //  public Fields getOutputFields() {
-      //      return new Fields("word");
-       // }
-    //});
-    //KafkaSpout kafkaSpout = new KafkaSpout(spoutConfig);
-    
-    
     builder.setSpout("spout",kafkaSpout, 1);
 
     //builder.setBolt("split", new SplitSentence(), 8).fieldsGrouping("spout", new Fields("word"));
-    //builder.setBolt("count", new WordCount(), 47).fieldsGrouping("spout", new Fields("word"));
-    builder.setBolt("count", new WordCount(), 12).shuffleGrouping("spout");
+    builder.setBolt("count", new WordCount(), 47).fieldsGrouping("spout", new Fields("word"));
+    //builder.setBolt("count", new WordCount(), 12).shuffleGrouping("spout");
 
     
     Config conf = new Config();
