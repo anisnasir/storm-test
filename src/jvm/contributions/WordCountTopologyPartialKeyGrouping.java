@@ -57,7 +57,7 @@ public class WordCountTopologyPartialKeyGrouping {
     builder.setSpout("spout", kafkaSpout, 1);
 
     //builder.setBolt("split", new SplitSentence(), 8).fieldsGrouping("spout", new Fields("word"));
-    builder.setBolt("count", new WordCount(), 47).partialKeyGrouping("spout", new Fields("word"));
+    builder.setBolt("count", new WordCount(), 7).partialKeyGrouping("spout", new Fields("word"));
     //builder.setBolt("count", new WordCount(), 12).shuffleGrouping("spout");
 
     
@@ -70,7 +70,7 @@ public class WordCountTopologyPartialKeyGrouping {
     //conf.put(Config.TOPOLOGY_EXECUTOR_SEND_BUFFER_SIZE,    16384);
 
     if (args != null && args.length > 0) {
-    	conf.setNumWorkers(16); // use two worker processes
+    	conf.setNumWorkers(8); // use two worker processes
     
 
       StormSubmitter.submitTopologyWithProgressBar(args[0], conf, builder.createTopology());

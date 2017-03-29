@@ -51,7 +51,7 @@ public class WordCountTopologyShuffleGrouping {
 
     //builder.setBolt("split", new SplitSentence(), 8).fieldsGrouping("spout", new Fields("word"));
     //builder.setBolt("count", new WordCount(), 12).fieldsGrouping("spout", new Fields("word"));
-    builder.setBolt("count", new WordCount(), 47).shuffleGrouping("spout");
+    builder.setBolt("count", new WordCount(), 7).shuffleGrouping("spout");
 
     
     Config conf = new Config();
@@ -63,7 +63,7 @@ public class WordCountTopologyShuffleGrouping {
     //conf.put(Config.TOPOLOGY_EXECUTOR_SEND_BUFFER_SIZE,    16384);
 
     if (args != null && args.length > 0) {
-    	conf.setNumWorkers(16); // use two worker processes
+    	conf.setNumWorkers(8); // use two worker processes
     	
 
       StormSubmitter.submitTopologyWithProgressBar(args[0], conf, builder.createTopology());

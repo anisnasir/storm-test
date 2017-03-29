@@ -58,7 +58,7 @@ public class WordCountTopologyConsistentGrouping {
 
     builder.setSpout("spout", kafkaSpout, 1);
     //builder.setBolt("split", new SplitSentence(), 8).fieldsGrouping("spout", new Fields("word"));
-    BoltDeclarer bolt = builder.setBolt("count", new WordCount(), 47).customGrouping("spout", new ConsistentGrouping());
+    BoltDeclarer bolt = builder.setBolt("count", new WordCount(), 7).customGrouping("spout", new ConsistentGrouping());
     //builder.setBolt("count", new WordCount(), 12).shuffleGrouping("spout");
 
     
@@ -71,7 +71,7 @@ public class WordCountTopologyConsistentGrouping {
     //conf.put(Config.TOPOLOGY_EXECUTOR_SEND_BUFFER_SIZE,    16384);
 
     if (args != null && args.length > 0) {
-    	conf.setNumWorkers(16); // use two worker processes
+    	conf.setNumWorkers(8); // use two worker processes
     
 
       StormSubmitter.submitTopologyWithProgressBar(args[0], conf, builder.createTopology());
