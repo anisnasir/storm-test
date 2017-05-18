@@ -44,7 +44,7 @@ public class WordCount implements IRichBolt {
 		Long timestamp = Long.parseLong(tuple.getString(0));
 		String word = tuple.getString(1);
 		//LOG.info("tuple received " +timestamp + " " + word + " " + processingTime);
-		testWait(200000);
+		testWait(100000);
 		Long count = counts.get(word);
         if (count == null)
           count = (long) 0;
