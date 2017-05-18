@@ -64,7 +64,7 @@ public class WordCountTopologyConsistentGrouping {
     
     Config conf = new Config();
     //conf.setDebug(true);
-    conf.setMaxSpoutPending(50000);
+    conf.setMaxSpoutPending(1000000);
     //conf.put(Config.TOPOLOGY_DEBUG, true);
     //conf.put(Config.TOPOLOGY_TRANSFER_BUFFER_SIZE,            32);
     //conf.put(Config.TOPOLOGY_EXECUTOR_RECEIVE_BUFFER_SIZE, 16384);
