@@ -40,7 +40,7 @@ public class WordCountTopologyFieldGrouping {
     TopologyBuilder builder = new TopologyBuilder();
 
     String zkConnString="9.116.35.208:2181";
-    String topicName= "test";
+    String topicName= "twitter";
     BrokerHosts hosts = new ZkHosts(zkConnString);
     SpoutConfig spoutConfig = new SpoutConfig(hosts, topicName, "/" + topicName, UUID.randomUUID().toString());
     //spoutConfig.scheme = new SchemeAsMultiScheme(new WikiScheme());
@@ -48,10 +48,10 @@ public class WordCountTopologyFieldGrouping {
     KafkaSpout kafkaSpout = new KafkaSpout(spoutConfig);
     
     
-    builder.setSpout("spout",kafkaSpout, 1);
+    builder.setSpout("spout",kafkaSpout, 8);
 
     //builder.setBolt("split", new SplitSentence(), 8).fieldsGrouping("spout", new Fields("word"));
-    builder.setBolt("count", new WordCount(), 7).fieldsGrouping("spout", new Fields("word"));
+    builder.setBolt("count", new WordCount(), 24).fieldsGrouping("spout", new Fields("word"));
     //builder.setBolt("count", new WordCount(), 12).shuffleGrouping("spout");
 
     
@@ -64,7 +64,7 @@ public class WordCountTopologyFieldGrouping {
     //conf.put(Config.TOPOLOGY_EXECUTOR_SEND_BUFFER_SIZE,    16384);
 
     if (args != null && args.length > 0) {
-    	conf.setNumWorkers(8); // use two worker processes
+    	conf.setNumWorkers(16); // use two worker processes
     
 
       StormSubmitter.submitTopologyWithProgressBar(args[0], conf, builder.createTopology());
