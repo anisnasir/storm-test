@@ -40,7 +40,7 @@ public class ConsistentGrouping implements LoadAwareCustomStreamGrouping, Serial
     private Fields fields = null;
     private Fields outFields = null;
     private long lastUpdate = 0;
-    ConsistentHashing hash;
+    ConsistentGroupingPoRC cgporc;
 	int selected = 0 ;
   
     public ConsistentGrouping() {
@@ -54,7 +54,9 @@ public class ConsistentGrouping implements LoadAwareCustomStreamGrouping, Serial
     @Override
     public void prepare(WorkerTopologyContext context, GlobalStreamId stream, List<Integer> targetTasks) {
         this.targetTasks = targetTasks;
-        hash = new ConsistentHashing(targetTasks.size(), 100);
+        double epsilon = 0.01;
+        int numReplicas = 100;
+        cgporc = new ConsistentGroupingPoRC(targetTasks, numReplicas, epsilon);
         if (this.fields != null) {
             this.outFields = context.getComponentOutputFields(stream);
         }
@@ -105,14 +107,16 @@ public class ConsistentGrouping implements LoadAwareCustomStreamGrouping, Serial
             	for (int i = 0; i < targetTasks.size(); i++) {
                     double val = load.get(targetTasks.get(i));
                     
-                    if(val >=0.1) {
-                    	hash.reduceLoad(i);
+                    if(val >=0.9) {
+                    	cgporc.reduceLoad(i);
+                    }else if(val <=0.75) {
+                    	cgporc.increaseLoad(i);
                     }
             	}
                 lastUpdate = System.currentTimeMillis();
             }
             
-			int selected = hash.getServer(raw);
+			int selected = cgporc.getServer(raw);
 			boltIds.add(targetTasks.get(selected));
         }
         return boltIds;
