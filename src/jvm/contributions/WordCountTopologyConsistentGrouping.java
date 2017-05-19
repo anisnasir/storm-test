@@ -56,9 +56,9 @@ public class WordCountTopologyConsistentGrouping {
     spoutConfig.scheme = new KeyValueSchemeAsMultiScheme(new WikiScheme());
     KafkaSpout kafkaSpout = new KafkaSpout(spoutConfig);
 
-    builder.setSpout("spout", kafkaSpout, 8);
+    builder.setSpout("spout", kafkaSpout, 1);
     //builder.setBolt("split", new SplitSentence(), 8).fieldsGrouping("spout", new Fields("word"));
-    BoltDeclarer bolt = builder.setBolt("count", new WordCount(), 24).customGrouping("spout", new ConsistentGrouping());
+    BoltDeclarer bolt = builder.setBolt("count", new WordCount(), 15).customGrouping("spout", new ConsistentGrouping());
     //builder.setBolt("count", new WordCount(), 12).shuffleGrouping("spout");
 
     

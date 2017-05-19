@@ -54,10 +54,10 @@ public class WordCountTopologyPartialKeyGrouping {
     spoutConfig.scheme = new KeyValueSchemeAsMultiScheme(new WikiScheme());
     KafkaSpout kafkaSpout = new KafkaSpout(spoutConfig);
 
-    builder.setSpout("spout", kafkaSpout, 8);
+    builder.setSpout("spout", kafkaSpout, 1);
 
     //builder.setBolt("split", new SplitSentence(), 8).fieldsGrouping("spout", new Fields("word"));
-    builder.setBolt("count", new WordCount(), 24).partialKeyGrouping("spout", new Fields("word"));
+    builder.setBolt("count", new WordCount(), 15).partialKeyGrouping("spout", new Fields("word"));
     //builder.setBolt("count", new WordCount(), 12).shuffleGrouping("spout");
 
     
