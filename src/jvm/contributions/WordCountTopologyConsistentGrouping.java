@@ -49,16 +49,16 @@ public class WordCountTopologyConsistentGrouping {
     TopologyBuilder builder = new TopologyBuilder();
     
     String zkConnString="9.116.35.208:2181";
-    String topicName= "wiki";
+    String topicName= "twitter";
     BrokerHosts hosts = new ZkHosts(zkConnString);
     SpoutConfig spoutConfig = new SpoutConfig(hosts, topicName, "/" + topicName, UUID.randomUUID().toString());
     //spoutConfig.scheme = new SchemeAsMultiScheme(new WikiScheme());
     spoutConfig.scheme = new KeyValueSchemeAsMultiScheme(new WikiScheme());
     KafkaSpout kafkaSpout = new KafkaSpout(spoutConfig);
 
-    builder.setSpout("spout", kafkaSpout, 1);
+    builder.setSpout("spout", kafkaSpout, 8);
     //builder.setBolt("split", new SplitSentence(), 8).fieldsGrouping("spout", new Fields("word"));
-    BoltDeclarer bolt = builder.setBolt("count", new WordCount(), 15).customGrouping("spout", new ConsistentGrouping());
+    BoltDeclarer bolt = builder.setBolt("count", new WordCount(), 24).customGrouping("spout", new ConsistentGrouping());
     //builder.setBolt("count", new WordCount(), 12).shuffleGrouping("spout");
 
     
