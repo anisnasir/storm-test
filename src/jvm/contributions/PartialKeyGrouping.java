@@ -17,24 +17,22 @@ public class PartialKeyGrouping implements CustomStreamGrouping, Serializable {
 	private int numReplicas;
 	private int numMessages;
 	private double epsilon;
-	List<Integer> bins;
-	HashMap<Integer, LinkedList<Integer>> serverBin;
-	HashMap<Integer, Integer> binLoadMap;
-	HashMap<Integer, Integer> binWorkerMap;
+	private List<Integer> bins;
+	private HashMap<Integer, LinkedList<Integer>> serverBin;
+	private HashMap<Integer, Integer> binLoadMap;
+	private HashMap<Integer, Integer> binWorkerMap;
     private static final long serialVersionUID = -447379837314000353L;
     private List<Integer> targetTasks;
-    private long[] targetTaskStats;
     private HashFunction h1 = Hashing.murmur3_128(13);
-    private HashFunction h2 = Hashing.murmur3_128(17);
 
     @Override
     public void prepare(WorkerTopologyContext context, GlobalStreamId stream, List<Integer> targetTasks) {
         this.targetTasks = targetTasks;
-        targetTaskStats = new long[this.targetTasks.size()];
         numReplicas = 100;
         epsilon = 0.01;
-        this.bins = new ArrayList<Integer>();
         this.serverBin = new HashMap<Integer, LinkedList<Integer>> ();
+        this.binLoadMap = new HashMap<Integer, Integer> ();
+        this.binWorkerMap = new HashMap<Integer, Integer>();
         for (int node : targetTasks) {
 			add(node);
 		}
