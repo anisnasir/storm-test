@@ -14,34 +14,13 @@ import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
 public class PartialKeyGrouping implements CustomStreamGrouping, Serializable {
-	private class VirtualWorker {
-		long load;
-		int worker;
-		public VirtualWorker(long load, int worker) { 
-			this.load = load;
-			this.worker= worker;
-		}
-		public long getLoad() {
-			return load;
-		}
-		public void setLoad(long load) {
-			this.load = load;
-		}
-		public int getWorker() {
-			return worker;
-		}
-		public void setWorker(int worker) {
-			this.worker = worker;
-		}
-		public void incrementNumberMessage() {
-			load++;
-		}
-	}
 	private int numReplicas;
 	private int numMessages;
 	private double epsilon;
-	List<VirtualWorker> bins;
+	List<Integer> bins;
 	HashMap<Integer, LinkedList<Integer>> serverBin;
+	HashMap<Integer, Integer> binLoadMap;
+	HashMap<Integer, Integer> binWorkerMap;
     private static final long serialVersionUID = -447379837314000353L;
     private List<Integer> targetTasks;
     private long[] targetTaskStats;
@@ -54,7 +33,7 @@ public class PartialKeyGrouping implements CustomStreamGrouping, Serializable {
         targetTaskStats = new long[this.targetTasks.size()];
         numReplicas = 100;
         epsilon = 0.01;
-        this.bins = new ArrayList<VirtualWorker>();
+        this.bins = new ArrayList<Integer>();
         this.serverBin = new HashMap<Integer, LinkedList<Integer>> ();
         for (int node : targetTasks) {
 			add(node);
@@ -65,7 +44,10 @@ public class PartialKeyGrouping implements CustomStreamGrouping, Serializable {
 		LinkedList<Integer> temp = new LinkedList<Integer>();
 		for (int i = 0; i < numReplicas; i++) {
 			temp.add(bins.size());
-			bins.add(new VirtualWorker(0,node));
+			int id = bins.size();
+			bins.add(id);
+			binLoadMap.put(id, 0);
+			binWorkerMap.put(id, node);
 		}
 		serverBin.put(node, temp);
 	}
@@ -78,16 +60,16 @@ public class PartialKeyGrouping implements CustomStreamGrouping, Serializable {
     		numMessages++;			
     		int salt = 1;
     		double avgLoad = numMessages/((double)bins.size());
-    		int candidateChoice = (int) (Math.abs(h1.hashBytes(key.getBytes()).asLong()) % this.targetTasks.size());
-    		VirtualWorker candidateBin = bins.get(candidateChoice);
-    		while(candidateBin.getLoad() >= (1+epsilon)*avgLoad) {
+    		int candidateChoice = (int) (Math.abs(h1.hashBytes(key.getBytes()).asLong()) % bins.size());
+    		
+    		while(binLoadMap.get(candidateChoice) >= (1+epsilon)*avgLoad) {
     			String newKey = key+":"+salt;
-    			candidateChoice = (int) (Math.abs(h1.hashBytes(newKey.getBytes()).asLong()) % this.targetTasks.size());
-    			candidateBin = bins.get(candidateChoice);
+    			candidateChoice = (int) (Math.abs(h1.hashBytes(newKey.getBytes()).asLong()) % bins.size());
     			salt++;
     		}
-    		candidateBin.incrementNumberMessage();
-    		boltIds.add(targetTasks.get(candidateBin.getWorker()));
+    		int currentLoad = binLoadMap.get(candidateChoice);
+    		binLoadMap.put(candidateChoice, currentLoad+1);
+    		boltIds.add(targetTasks.get(binWorkerMap.get(candidateChoice)));
         }
         return boltIds;
     }
