@@ -35,6 +35,29 @@ import com.google.common.hash.Hashing;
 
 
 public class ConsistentGrouping implements LoadAwareCustomStreamGrouping, Serializable {
+	private class VirtualWorker {
+		long load;
+		int worker;
+		public VirtualWorker(long load, int worker) { 
+			this.load = load;
+			this.worker= worker;
+		}
+		public long getLoad() {
+			return load;
+		}
+		public void setLoad(long load) {
+			this.load = load;
+		}
+		public int getWorker() {
+			return worker;
+		}
+		public void setWorker(int worker) {
+			this.worker = worker;
+		}
+		public void incrementNumberMessage() {
+			load++;
+		}
+	}
     private static final long serialVersionUID = -447379837314000353L;
     private List<Integer> targetTasks;
     private Fields fields = null;
