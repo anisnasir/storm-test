@@ -58,7 +58,7 @@ public class WordCountTopologyConsistentGrouping {
 
     builder.setSpout("spout", kafkaSpout, 1);
     //builder.setBolt("split", new SplitSentence(), 8).fieldsGrouping("spout", new Fields("word"));
-    BoltDeclarer bolt = builder.setBolt("count", new WordCount(), 15).customGrouping("spout", new ConsistentGrouping());
+    BoltDeclarer bolt = builder.setBolt("count", new WordCount(), 15).customGrouping("spout", new PartialKeyGrouping());
     //builder.setBolt("count", new WordCount(), 12).shuffleGrouping("spout");
 
     
