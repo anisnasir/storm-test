@@ -40,7 +40,7 @@ public class WordCountTopologyShuffleGrouping {
     TopologyBuilder builder = new TopologyBuilder();
     
     String zkConnString="9.116.35.208:2181";
-    String topicName= "twitter";
+    String topicName= "wiki";
     BrokerHosts hosts = new ZkHosts(zkConnString);
     SpoutConfig spoutConfig = new SpoutConfig(hosts, topicName, "/" + topicName, UUID.randomUUID().toString());
     //spoutConfig.scheme = new SchemeAsMultiScheme(new WikiScheme());
