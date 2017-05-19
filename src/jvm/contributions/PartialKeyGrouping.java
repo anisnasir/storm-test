@@ -68,7 +68,7 @@ public class PartialKeyGrouping implements CustomStreamGrouping, Serializable {
     		}
     		int currentLoad = binLoadMap.get(candidateChoice);
     		binLoadMap.put(candidateChoice, currentLoad+1);
-    		boltIds.add(targetTasks.get(binWorkerMap.get(candidateChoice)));
+    		boltIds.add(targetTasks.get(0));
         }
         return boltIds;
     }
