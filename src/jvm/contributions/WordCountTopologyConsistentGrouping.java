@@ -49,22 +49,22 @@ public class WordCountTopologyConsistentGrouping {
     TopologyBuilder builder = new TopologyBuilder();
     
     String zkConnString="9.116.35.208:2181";
-    String topicName= "twitter";
+    String topicName= "wiki";
     BrokerHosts hosts = new ZkHosts(zkConnString);
     SpoutConfig spoutConfig = new SpoutConfig(hosts, topicName, "/" + topicName, UUID.randomUUID().toString());
     //spoutConfig.scheme = new SchemeAsMultiScheme(new WikiScheme());
     spoutConfig.scheme = new KeyValueSchemeAsMultiScheme(new WikiScheme());
     KafkaSpout kafkaSpout = new KafkaSpout(spoutConfig);
 
-    builder.setSpout("spout", kafkaSpout, 8);
+    builder.setSpout("spout", kafkaSpout, 1);
     //builder.setBolt("split", new SplitSentence(), 8).fieldsGrouping("spout", new Fields("word"));
-    BoltDeclarer bolt = builder.setBolt("count", new WordCount(), 24).customGrouping("spout", new ConsistentGrouping());
+    BoltDeclarer bolt = builder.setBolt("count", new WordCount(), 15).customGrouping("spout", new ConsistentGrouping());
     //builder.setBolt("count", new WordCount(), 12).shuffleGrouping("spout");
 
     
     Config conf = new Config();
     //conf.setDebug(true);
-    conf.setMaxSpoutPending(100);
+    conf.setMaxSpoutPending(1000);
     //conf.put(Config.TOPOLOGY_DEBUG, true);
     //conf.put(Config.TOPOLOGY_TRANSFER_BUFFER_SIZE,            32);
     //conf.put(Config.TOPOLOGY_EXECUTOR_RECEIVE_BUFFER_SIZE, 16384);
