@@ -35,29 +35,7 @@ import com.google.common.hash.Hashing;
 
 
 public class ConsistentGrouping implements LoadAwareCustomStreamGrouping, Serializable {
-	private class VirtualWorker {
-		long load;
-		int worker;
-		public VirtualWorker(long load, int worker) { 
-			this.load = load;
-			this.worker= worker;
-		}
-		public long getLoad() {
-			return load;
-		}
-		public void setLoad(long load) {
-			this.load = load;
-		}
-		public int getWorker() {
-			return worker;
-		}
-		public void setWorker(int worker) {
-			this.worker = worker;
-		}
-		public void incrementNumberMessage() {
-			load++;
-		}
-	}
+	
     private static final long serialVersionUID = -447379837314000353L;
     private List<Integer> targetTasks;
     private Fields fields = null;
@@ -79,7 +57,11 @@ public class ConsistentGrouping implements LoadAwareCustomStreamGrouping, Serial
         this.targetTasks = targetTasks;
         double epsilon = 0.01;
         int numReplicas = 100;
-        cgporc = new ConsistentGroupingPoRC(targetTasks, numReplicas, epsilon);
+        List<Integer> list = new ArrayList<Integer>();
+        for(int i = 0 ; i< targetTasks.size();i++) {
+        	list.add(i);
+        }
+        cgporc = new ConsistentGroupingPoRC(list, numReplicas, epsilon);
         if (this.fields != null) {
             this.outFields = context.getComponentOutputFields(stream);
         }
@@ -125,7 +107,7 @@ public class ConsistentGrouping implements LoadAwareCustomStreamGrouping, Serial
                 raw = values.get(0).toString().getBytes(); // assume key is the first field
             }
             
-          /*  if ((lastUpdate + 60000) < System.currentTimeMillis()) {
+            if ((lastUpdate + 60000) < System.currentTimeMillis()) {
             	//add increase load and decrease load logic
             	for (int i = 0; i < targetTasks.size(); i++) {
                     double val = load.get(targetTasks.get(i));
@@ -138,7 +120,7 @@ public class ConsistentGrouping implements LoadAwareCustomStreamGrouping, Serial
             	}
                 lastUpdate = System.currentTimeMillis();
             }
-            */
+            
             
 			int selected = cgporc.getServer(raw);
 			boltIds.add(targetTasks.get(selected));
