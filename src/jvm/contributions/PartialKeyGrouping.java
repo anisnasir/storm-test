@@ -37,8 +37,8 @@ public class PartialKeyGrouping implements CustomStreamGrouping, Serializable {
         this.serverBin = new HashMap<Integer, LinkedList<Integer>> ();
         this.binLoadMap = new HashMap<Integer, Integer> ();
         this.binWorkerMap = new HashMap<Integer, Integer>();
-        for (int targetTask : targetTasks) {
-			add(targetTask);
+        for (int i = 0;i< targetTasks.size();i++) {
+			add(i);
 		}
         this.numMessages = 0;
     }
@@ -72,7 +72,7 @@ public class PartialKeyGrouping implements CustomStreamGrouping, Serializable {
     		int currentLoad = binLoadMap.get(candidateChoice);
     		binLoadMap.put(candidateChoice, currentLoad+1);
     		int targetTask = binWorkerMap.get(candidateChoice);
-    		LOG.info("target worker " + targetTask + " " + "target tasks size " + targetTasks.size() + " bin size " + bins.size() + " targetTasks" + this.targetTasks);
+    		//LOG.info("target worker " + targetTask + " " + "target tasks size " + targetTasks.size() + " bin size " + bins.size() + " targetTasks" + this.targetTasks);
     		boltIds.add(targetTasks.get(targetTask));
         }
         return boltIds;
