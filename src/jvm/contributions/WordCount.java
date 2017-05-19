@@ -3,6 +3,7 @@ package contributions;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.storm.metric.api.CountMetric;
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.BasicOutputCollector;
@@ -19,6 +20,7 @@ public class WordCount implements IRichBolt {
 	public static final Logger LOG = LoggerFactory.getLogger(WordCount.class);
 	Map<String, Long> counts = new HashMap<String, Long>();
 	OutputCollector _collector;
+	private transient CountMetric countMetric;
 
 	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
@@ -41,6 +43,7 @@ public class WordCount implements IRichBolt {
 
 	@Override
 	public void execute(Tuple tuple) {
+		countMetric.incr();
 		Long timestamp = Long.parseLong(tuple.getString(0));
 		String word = tuple.getString(1);
 		//LOG.info("tuple received " +timestamp + " " + word + " " + processingTime);
@@ -59,6 +62,8 @@ public class WordCount implements IRichBolt {
 	public void prepare(Map arg0, TopologyContext arg1, OutputCollector arg2) {
 		// TODO Auto-generated method stub
 		this._collector = arg2;
+		countMetric = new CountMetric();
+	    arg1.registerMetric("execute_count", countMetric, 60);
 
 	}
 
