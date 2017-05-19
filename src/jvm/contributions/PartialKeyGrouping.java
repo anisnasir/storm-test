@@ -30,6 +30,7 @@ public class PartialKeyGrouping implements CustomStreamGrouping, Serializable {
         this.targetTasks = targetTasks;
         numReplicas = 100;
         epsilon = 0.01;
+        bins = new ArrayList<Integer>();
         this.serverBin = new HashMap<Integer, LinkedList<Integer>> ();
         this.binLoadMap = new HashMap<Integer, Integer> ();
         this.binWorkerMap = new HashMap<Integer, Integer>();
