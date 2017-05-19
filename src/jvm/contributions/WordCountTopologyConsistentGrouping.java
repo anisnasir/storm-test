@@ -69,6 +69,7 @@ public class WordCountTopologyConsistentGrouping {
     //conf.put(Config.TOPOLOGY_TRANSFER_BUFFER_SIZE,            32);
     //conf.put(Config.TOPOLOGY_EXECUTOR_RECEIVE_BUFFER_SIZE, 16384);
     //conf.put(Config.TOPOLOGY_EXECUTOR_SEND_BUFFER_SIZE,    16384);
+    conf.registerMetricsConsumer(org.apache.storm.metric.LoggingMetricsConsumer.class, 1);
 
     if (args != null && args.length > 0) {
     	conf.setNumWorkers(16); // use two worker processes
