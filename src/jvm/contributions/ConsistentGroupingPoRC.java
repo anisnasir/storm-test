@@ -49,9 +49,7 @@ public class ConsistentGroupingPoRC{
 			LinkedList<Integer> underLoadedBins = serverBin.get(underloadedWorker);
 			underLoadedBins.add(binIndex);
 			bins.get(binIndex).setWorker(underloadedWorker);
-			
 		}
-		
 	}
 	
 	public void reduceLoad(int overloadedWorker) {
